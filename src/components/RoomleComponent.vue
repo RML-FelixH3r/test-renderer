@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
   import {onMounted, ref} from "vue";
+  // @ts-ignore
   import RoomleConfiguratorApi from '@roomle/embedding-lib/roomle-configurator-api';
 
   const props = defineProps({

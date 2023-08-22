@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import RoomleComponent from 'src/components/RoomleComponent.vue';
+  import RoomleComponent from '@/components/RoomleComponent.vue';
   import {ref} from "vue";
 
   const configurationIds = ref(['usm:frame', 'allnatura:showcase_2', 'jab:soulmate', 'visplay:qubo_preset_VAR5']);
