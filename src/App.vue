@@ -29,6 +29,7 @@
 
 <script lang="ts" setup>
   import RoomleComponent from '@/components/RoomleComponent.vue';
+  // @ts-ignore
   import {computed, nextTick, Ref, ref} from "vue";
 
   const mapInput = ref(undefined);
