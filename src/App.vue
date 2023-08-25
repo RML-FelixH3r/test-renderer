@@ -1,19 +1,29 @@
 <template>
   <div class="input-wrapper">
-    <label>environment map (search on: <a href="https://polyhaven.com/hdris" target="_blank">polyhaven</a>): </label>
-    <input v-model="mapInput" placeholder="environment map"/>
-    <label>environment map intensity (also decimal allowed): </label>
-    <input v-model="intensityInput" placeholder="map intensity" type="number"/>
-    <label>configurationIds (divided by commas): </label>
-    <textarea v-model="configurationIdsInput"
-              placeholder="usm:frame, allnatura:showcase_2, jab:soulmate, visplay:qubo_preset_VAR5"/>
-    <button @click="applyValues">Test</button>
-
+    <div class="input-col">
+      <div>
+        <label>moc: </label>
+        <input v-model="isMoc" type="checkbox">
+      </div>
+      <label>configurationIds (divided by commas): </label>
+      <textarea v-model="configurationIdsInput"
+                placeholder="usm:frame, allnatura:showcase_2, jab:soulmate, visplay:qubo_preset_VAR5"/>
+      <button @click="applyValuesAllConfigs">submit and reload all configurators</button>
+    </div>
+    <div class="input-col">
+      <label>environment map (search on: <a href="https://polyhaven.com/hdris" target="_blank">polyhaven</a>): </label>
+      <input v-model="mapInput" placeholder="environment map"/>
+      <label>environment map intensity (also decimal allowed): </label>
+      <input v-model="intensityInput" placeholder="map intensity" type="number"/>
+      <button @click="applyValuesNewRenderer">submit and reload new renderer configurators</button>
+    </div>
   </div>
+
   <div class="roomle-wrapper">
     <div v-if="showOld" class="roomle-col">
       <roomle-component v-for="configurationId in configurationIds"
                         :configuration-id="configurationId"
+                        :isMoc="isMoc"
       />
     </div>
     <div v-if="showNew" class="roomle-col">
@@ -21,6 +31,7 @@
                         :configuration-id="configurationId"
                         :environment-map-intensity="intensityInput"
                         :environment-map-url="mapInput"
+                        :isMoc="isMoc"
                         :override-server-url="'https://alpha.roomle.com/t/new-renderer/'"
       />
     </div>
@@ -29,12 +40,12 @@
 
 <script lang="ts" setup>
   import RoomleComponent from '@/components/RoomleComponent.vue';
-  // @ts-ignore
-  import {computed, nextTick, Ref, ref} from "vue";
+  import {computed, nextTick, ref} from "vue";
 
   const mapInput = ref(undefined);
   const intensityInput = ref(2);
-  const configurationIdsInput: Ref<string | undefined> = ref(undefined);
+  const configurationIdsInput = ref<string | undefined>(undefined);
+  const isMoc = ref(false);
   let configurationIds = ['usm:frame', 'allnatura:showcase_2', 'jab:soulmate', 'visplay:qubo_preset_VAR5'];
   const showNew = ref(true);
   const showOld = ref(true);
@@ -42,16 +53,40 @@
 
   computed(() => console.log(intensityInput.value));
 
+  const applyValuesAllConfigs = () => {
+    if (!showOld.value) {
+      return;
+    }
+    if (configurationIdsInput.value) {
+      const str = configurationIdsInput.value?.replace(/ /g, '');
+      configurationIds = str.split(",");
+    }
+    showOld.value = false;
+    nextTick(() => showOld.value = true);
+    applyValuesNewRenderer();
+  };
+
+  const applyValuesNewRenderer = () => {
+    if (!showNew.value) {
+      return;
+    }
+    showNew.value = false;
+    nextTick(() => showNew.value = true);
+  };
+
   const applyValues = () => {
     if (!showNew.value || !showOld.value) {
       return;
     }
     showNew.value = false;
     if (configurationIdsInput.value) {
-      const str = configurationIdsInput.value?.replace(/ /g, '');
-      configurationIds = str.split(",");
-      showOld.value = false;
-      nextTick(() => showOld.value = true);
+      const str = configurationIdsInput.value.replace(/ /g, '');
+      const newConfigurationIds = str.split(",");
+      if (JSON.stringify(configurationIds) !== JSON.stringify(newConfigurationIds)) {
+        configurationIds = newConfigurationIds;
+        showOld.value = false;
+        nextTick(() => showOld.value = true);
+      }
     }
     nextTick(() => showNew.value = true);
   };
@@ -76,9 +111,16 @@
 
   .input-wrapper {
     display: flex;
-    flex-direction: column;
     margin-bottom: 2rem;
-    width: 30%;
+    gap: 2rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .input-col {
+    display: flex;
+    flex-direction: column;
+    width: 45vw;
   }
 
   input, textarea {

@@ -12,7 +12,8 @@
         overrideServerUrl: String as PropType<string | null>,
         configurationId: String as PropType<string | null>,
         environmentMapUrl: String as PropType<string | null>,
-        environmentMapIntensity: Number as PropType<number | null>
+        environmentMapIntensity: Number as PropType<number | null>,
+        isMoc: Boolean
       }
   );
   const roomleContainer = ref(null);
@@ -20,7 +21,8 @@
     overrideServerUrl: props.overrideServerUrl,
     id: props.configurationId,
     envMapUrl: props.environmentMapUrl,
-    envMapIntensity: props.environmentMapIntensity
+    envMapIntensity: props.environmentMapIntensity,
+    moc: props.isMoc
   });
   onMounted(async () => {
     await loadConfigurator();
