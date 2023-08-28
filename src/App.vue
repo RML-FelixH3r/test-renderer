@@ -5,16 +5,19 @@
         <label>moc: </label>
         <input v-model="isMoc" type="checkbox">
       </div>
-      <label>configurationIds (divided by commas): </label>
+      <label>configuration or (if moc) plan ids (divided by commas): </label>
       <textarea v-model="configurationIdsInput"
                 placeholder="usm:frame, allnatura:showcase_2, jab:soulmate, visplay:qubo_preset_VAR5"/>
       <button @click="applyValuesAllConfigs">submit and reload all configurators</button>
     </div>
     <div class="input-col">
-      <label>environment map (search on: <a href="https://polyhaven.com/hdris" target="_blank">polyhaven</a>): </label>
-      <input v-model="mapInput" placeholder="environment map"/>
+      <label>environment map (<a
+          href="https://roomle.atlassian.net/wiki/spaces/IK/pages/2353594369/How+to+setup+environment+maps+in+new+renderer"
+          target="_blank">how to get a map</a>): </label>
+      <input v-model="mapInput"
+             placeholder="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/studio_small_09_1k.exr"/>
       <label>environment map intensity (also decimal allowed): </label>
-      <input v-model="intensityInput" placeholder="map intensity" type="number"/>
+      <input v-model="intensityInput" placeholder="map intensity" step="0.1" type="number"/>
       <button @click="applyValuesNewRenderer">submit and reload new renderer configurators</button>
     </div>
   </div>
