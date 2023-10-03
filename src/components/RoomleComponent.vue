@@ -13,7 +13,8 @@
         configurationId: String as PropType<string | null>,
         environmentMapUrl: String as PropType<string | null>,
         environmentMapIntensity: Number as PropType<number | null>,
-        isMoc: Boolean
+        isMoc: Boolean,
+        legacyLight: Boolean
       }
   );
   const roomleContainer = ref(null);
@@ -22,7 +23,8 @@
     id: props.configurationId,
     envMapUrl: props.environmentMapUrl,
     envMapIntensity: props.environmentMapIntensity,
-    moc: props.isMoc
+    moc: props.isMoc,
+    legacyLight: props.legacyLight
   });
   onMounted(async () => {
     await loadConfigurator();

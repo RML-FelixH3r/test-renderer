@@ -11,13 +11,19 @@
       <button @click="applyValuesAllConfigs">submit and reload all configurators</button>
     </div>
     <div class="input-col">
+      <div>
+        <label>legacy light: </label>
+        <input v-model="legacyLight" type="checkbox">
+      </div>
       <label>environment map (<a
           href="https://roomle.atlassian.net/wiki/spaces/IK/pages/2353594369/How+to+setup+environment+maps+in+new+renderer"
           target="_blank">how to get a map</a>): </label>
       <input v-model="mapInput"
-             placeholder="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/studio_small_09_1k.exr"/>
+             :disabled="legacyLight"
+             placeholder="https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/1k/studio_small_09_1k.exr"
+      />
       <label>environment map intensity (also decimal allowed): </label>
-      <input v-model="intensityInput" placeholder="map intensity" step="0.1" type="number"/>
+      <input v-model="intensityInput" :disabled="legacyLight" placeholder="map intensity" step="0.1" type="number"/>
       <button @click="applyValuesNewRenderer">submit and reload new renderer configurators</button>
     </div>
   </div>
@@ -35,7 +41,8 @@
                         :environment-map-intensity="intensityInput"
                         :environment-map-url="mapInput"
                         :isMoc="isMoc"
-                        :override-server-url="'https://alpha.roomle.com/t/new-renderer/'"
+                        :legacy-light="legacyLight"
+                        :override-server-url="'https://alpha.roomle.com/t/cp/'"
       />
     </div>
   </div>
@@ -52,6 +59,7 @@
   let configurationIds = ['usm:frame', 'allnatura:showcase_2', 'jab:soulmate', 'visplay:qubo_preset_VAR5'];
   const showNew = ref(true);
   const showOld = ref(true);
+  const legacyLight = ref(false);
 
 
   computed(() => console.log(intensityInput.value));
